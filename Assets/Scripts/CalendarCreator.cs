@@ -7,7 +7,6 @@ public class CalendarCreator : MonoBehaviour
 {
 
     private List<Month> allMonths;
-    private int thisDayOfMonth;
 
     [SerializeField] GameObject CalendarDayPrefab;
     [SerializeField] Transform positionParent;
@@ -18,6 +17,8 @@ public class CalendarCreator : MonoBehaviour
     private CalendarDay selectedCalendarDay = null;
 
     public static CalendarCreator instance = null;
+
+    private int curMonthIndex = 0;
 
     private void Awake()
     {
@@ -31,36 +32,39 @@ public class CalendarCreator : MonoBehaviour
         }
     }
 
-    internal void SetSelectedCalendarDay(CalendarDay newSelectedDay)
+    // Start is called before the first frame update
+    void Start()
+    {
+        allMonths = MonthContainer.GetMonths();
+        CreateThisMonthCalendar(allMonths[curMonthIndex]);
+    }
+
+    public void SetSelectedCalendarDay(CalendarDay newSelectedDay)
     {
         if (selectedCalendarDay != null)
         {
             selectedCalendarDay.RemoveSelected();
         }
         selectedCalendarDay = newSelectedDay;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        allMonths = MonthContainer.GetMonths();
-        CreateThisMonthCalendar(allMonths[0]);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        SelectedDayController.instance.UpdateDisplay(newSelectedDay);
     }
 
     public void AdvanceMonth()
     {
-        ClearCalendar();
+        if (curMonthIndex < allMonths.Count-1)
+        {
+            curMonthIndex += 1;
+            CreateThisMonthCalendar(allMonths[curMonthIndex]);
+        }
     }
 
     public void GoBackMonth()
     {
-
+        if (curMonthIndex > 0)
+        {
+            curMonthIndex -= 1;
+            CreateThisMonthCalendar(allMonths[curMonthIndex]);
+        }
     }
 
     private void ClearCalendar()
@@ -77,6 +81,7 @@ public class CalendarCreator : MonoBehaviour
 
     private void CreateThisMonthCalendar(Month monthToCreate)
     {
+        ClearCalendar();
         monthNameText.text = monthToCreate.monthName;
         List<GameObject> positions = CreatePositions();
         CreateCalendarDays(positions,monthToCreate);
@@ -120,7 +125,11 @@ public class CalendarCreator : MonoBehaviour
             day.GetComponent<RectTransform>().anchoredPosition = curPosition.GetComponent<RectTransform>().anchoredPosition;
             day.name = $"CalendarDay {curDay}";
 
-            day.GetComponent<CalendarDay>().SetDay(curDay);
+            CalendarDay calDay = day.GetComponent<CalendarDay>();
+            calDay.SetDay(curDay);
+            calDay.SetMonth(thisMonth.monthName);
+            calDay.SetYear(thisMonth.year);
+
             curDay += 1;
         }
     }
