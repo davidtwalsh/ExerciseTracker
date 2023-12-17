@@ -19,9 +19,9 @@ public static class MonthContainer
     private static void InitMonths()
     {
         months = new List<Month>();
-        months.Add(new Month(Day.Friday, Day.Sunday, 31, "December", "2023"));
-        months.Add(new Month(Day.Monday, Day.Wednesday, 31, "January", "2024"));
-        months.Add(new Month(Day.Thursday, Day.Thursday, 29, "February", "2024"));
-        months.Add(new Month(Day.Friday, Day.Sunday, 31, "March", "2024"));
+        months.Add(new Month(DayEnum.Friday, DayEnum.Sunday, 31, "December", "2023"));
+        months.Add(new Month(DayEnum.Monday, DayEnum.Wednesday, 31, "January", "2024"));
+        months.Add(new Month(DayEnum.Thursday, DayEnum.Thursday, 29, "February", "2024"));
+        months.Add(new Month(DayEnum.Friday, DayEnum.Sunday, 31, "March", "2024"));
     }
 }

@@ -5,13 +5,13 @@ using UnityEngine;
 public class Month
 {
 
-    private Day startDay;
-    private Day endDay;
-    private int numDays;
-    private string monthName;
-    private string year;
+    public DayEnum startDay;
+    public DayEnum endDay;
+    public int numDays;
+    public string monthName;
+    public string year;
 
-    public Month(Day startDay,Day endDay, int numDays, string monthName, string year)
+    public Month(DayEnum startDay,DayEnum endDay, int numDays, string monthName, string year)
     {
         this.startDay = startDay;
         this.endDay = endDay;
@@ -19,9 +19,21 @@ public class Month
         this.monthName = monthName;
         this.year = year;
     }
+
+    public static readonly Dictionary<DayEnum, int> dayStartOffset
+    = new Dictionary<DayEnum, int>
+    {
+        { DayEnum.Sunday, 0 },
+        { DayEnum.Monday, 1},
+        { DayEnum.Tuesday, 2},
+        { DayEnum.Wednesday, 3},
+        { DayEnum.Thursday, 4},
+        { DayEnum.Friday, 5},
+        { DayEnum.Saturday, 6},
+    };
 }
 
-public enum Day
+public enum DayEnum
 {
     Sunday,
     Monday,
@@ -31,3 +43,4 @@ public enum Day
     Friday,
     Saturday
 }
+
