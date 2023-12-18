@@ -41,7 +41,14 @@ public class CalendarDay : MonoBehaviour
 
     public void UpdateHoursText()
     {
-        hoursText.text = hours.ToString();
+        if (hours == 0)
+        {
+            hoursText.text = "";
+        }
+        else
+        {
+            hoursText.text = hours.ToString();
+        }
 
         Color c = gradient.Evaluate(hours / maxHours);
         hoursText.color = c;

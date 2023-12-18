@@ -34,7 +34,7 @@ public class AddTimeController : MonoBehaviour
         string formattedTime = "";
         while (Mathf.Abs(curTimeToAdd - newTimeToAddGoal) > .01f)
         {
-            float difToAdd = (newTimeToAddGoal - curTimeToAdd) / 5f;
+            float difToAdd = (newTimeToAddGoal - curTimeToAdd) / 3f;
             curTimeToAdd += difToAdd;
 
             formattedTime = curTimeToAdd.ToString("0.00"); //2dp Number
