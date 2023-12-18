@@ -24,10 +24,11 @@ public class SelectedDayController : MonoBehaviour
     public void UpdateDisplay(CalendarDay newSelectedDay)
     {
         dateText.text = $"{newSelectedDay.month} {newSelectedDay.day}, {newSelectedDay.year}";
+        UpdateDisplay(newSelectedDay.GetHours());
     }
 
     public void UpdateDisplay(float f)
     {
-        timeText.text = $"Time spent: {f}";
+        timeText.text = $"Time spent: {f} hours";
     }
 }

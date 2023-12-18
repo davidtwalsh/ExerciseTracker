@@ -14,11 +14,15 @@ public class CalendarCreator : MonoBehaviour
     [SerializeField] GameObject positionPrefab;
     [SerializeField] TMPro.TextMeshProUGUI monthNameText;
 
-    private CalendarDay selectedCalendarDay = null;
+    public CalendarDay selectedCalendarDay = null;
 
     public static CalendarCreator instance = null;
 
     private int curMonthIndex = 0;
+
+    public DataLoader dl;
+
+    List<CalendarDay> thisMonthsDays = new List<CalendarDay>();
 
     private void Awake()
     {
@@ -35,8 +39,69 @@ public class CalendarCreator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        dl = new DataLoader();
+
         allMonths = MonthContainer.GetMonths();
+
+        DateTime today = DateTime.Today;
+        string date = today.ToString("dd/MM/yyyy");
+        string[] splitDate = date.Split('/');
+        string month = Date.monthNumberToName[splitDate[1]];
+        string day = splitDate[0];
+        string year = splitDate[2];
+
+        curMonthIndex = GetCurrentMonthOnLoad(month, year);
+
         CreateThisMonthCalendar(allMonths[curMonthIndex]);
+
+        SetCurrentCalendarDayOnLoad(day);
+
+    }
+
+    private int GetCurrentMonthOnLoad(string curMonth, string curYear) 
+    {
+        for (int i=0; i < allMonths.Count; i++)
+        {
+            Month month = allMonths[i];
+            if (month.monthName == curMonth && month.year == curYear)
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    private void SetCurrentCalendarDayOnLoad(string day) 
+    {
+        foreach (CalendarDay calDay in thisMonthsDays)
+        {
+            if (calDay.day == int.Parse(day))
+            {
+                calDay.SetSelected();
+                break;
+            }
+        }
+        
+    }
+
+    public void UpdateCurrentCalendarDay()
+    {
+        if (selectedCalendarDay != null)
+        {
+            SelectedDayController.instance.UpdateDisplay(selectedCalendarDay);
+            selectedCalendarDay.UpdateHoursText();
+
+            string date = selectedCalendarDay.month + "-" + selectedCalendarDay.day + "-" + selectedCalendarDay.year;
+            if (dl.dateToHours.ContainsKey(date))
+            {
+                dl.dateToHours[date] = selectedCalendarDay.GetHours();
+            }
+            else
+            {
+                dl.dateToHours.Add(date, selectedCalendarDay.GetHours());
+            }
+            dl.UpdateData();
+        }
     }
 
     public void SetSelectedCalendarDay(CalendarDay newSelectedDay)
@@ -46,7 +111,8 @@ public class CalendarCreator : MonoBehaviour
             selectedCalendarDay.RemoveSelected();
         }
         selectedCalendarDay = newSelectedDay;
-        SelectedDayController.instance.UpdateDisplay(newSelectedDay);
+        UpdateCurrentCalendarDay();
+        AddTimeController.instance.ResetTimeToAdd();
     }
 
     public void AdvanceMonth()
@@ -77,12 +143,13 @@ public class CalendarCreator : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        thisMonthsDays = new List<CalendarDay>();
     }
 
     private void CreateThisMonthCalendar(Month monthToCreate)
     {
         ClearCalendar();
-        monthNameText.text = monthToCreate.monthName;
+        monthNameText.text = monthToCreate.monthName + " " + monthToCreate.year;
         List<GameObject> positions = CreatePositions();
         CreateCalendarDays(positions,monthToCreate);
     }
@@ -130,6 +197,13 @@ public class CalendarCreator : MonoBehaviour
             calDay.SetMonth(thisMonth.monthName);
             calDay.SetYear(thisMonth.year);
 
+            string key = thisMonth.monthName + "-" + curDay + "-" + thisMonth.year;
+            if (dl.dateToHours.ContainsKey(key))
+            {
+                calDay.SetHours(dl.dateToHours[key]);
+            }
+
+            thisMonthsDays.Add(calDay);
             curDay += 1;
         }
     }

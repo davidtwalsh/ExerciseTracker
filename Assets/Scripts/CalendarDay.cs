@@ -17,16 +17,39 @@ public class CalendarDay : MonoBehaviour
     public string month;
     public string year;
 
-    private float hours;
+    private float hours = 0f;
     private readonly float maxHours = 4f;
 
     void Start()
     {
-        hours = GetRandomHours();
+        //hours = GetRandomHours();
+        UpdateHoursText();
+    }
+
+    public void UpdateHoursText()
+    {
         hoursText.text = hours.ToString();
 
         Color c = gradient.Evaluate(hours / maxHours);
         hoursText.color = c;
+        //SetSelected();
+    }
+
+    public void SetHours(float f)
+    {
+        hours = f;
+        UpdateHoursText();
+    }
+
+    public float GetHours()
+    {
+        return hours;
+    }
+
+    public void AddHours(float f)
+    {
+        hours = Mathf.Max(0, hours + f);
+        UpdateHoursText();
     }
 
     public void SetYear(string year)

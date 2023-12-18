@@ -44,3 +44,50 @@ public enum DayEnum
     Saturday
 }
 
+public class Date
+{
+    public string month;
+    public string day;
+    public string year;
+
+    public Date(string month, string day, string year)
+    {
+        this.month = month;
+        this.day = day;
+        this.year = year;
+    }
+
+    public static readonly Dictionary<string, string> monthNumberToName
+= new Dictionary<string, string>
+{
+        { "1", MonthNames.january },
+        { "2", MonthNames.february },
+        { "3", MonthNames.march },
+        { "4", MonthNames.april },
+        { "5", MonthNames.may },
+        { "6", MonthNames.june },
+        { "7", MonthNames.july },
+        { "8", MonthNames.august },
+        { "9", MonthNames.september },
+        { "10", MonthNames.october },
+        { "11", MonthNames.november },
+        { "12", MonthNames.december }
+};
+}
+
+public class MonthNames
+{
+    public static string january = "January";
+    public static string february = "February";
+    public static string march = "March";
+    public static string april = "April";
+    public static string may = "May";
+    public static string june = "June";
+    public static string july = "July";
+    public static string august = "August";
+    public static string september = "September";
+    public static string october = "October";
+    public static string november = "November";
+    public static string december = "December";
+}
+
