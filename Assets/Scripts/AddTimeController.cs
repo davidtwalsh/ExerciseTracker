@@ -25,7 +25,6 @@ public class AddTimeController : MonoBehaviour
     public void AddTime(float time)
     {
         newTimeToAddGoal += time;
-        newTimeToAddGoal = Mathf.Max(0, newTimeToAddGoal);
         StopAllCoroutines();
         StartCoroutine(GetToNewTime());
     }

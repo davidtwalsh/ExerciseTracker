@@ -12,6 +12,9 @@ public class CalendarDay : MonoBehaviour
     [SerializeField] Image buttonImage;
     [SerializeField] TMPro.TextMeshProUGUI hoursText;
     [SerializeField] Gradient gradient;
+    [SerializeField] Button button;
+
+    AudioSource audioSource;
 
     public int day;
     public string month;
@@ -24,6 +27,16 @@ public class CalendarDay : MonoBehaviour
     {
         //hours = GetRandomHours();
         UpdateHoursText();
+
+        GameObject audioSourceObj = GameObject.FindGameObjectWithTag("ButtonAudioSource");
+        audioSource = audioSourceObj.GetComponent<AudioSource>();
+
+        button.onClick.AddListener(PlaySound);
+    }
+
+    void PlaySound()
+    {
+        audioSource.Play();
     }
 
     public void UpdateHoursText()

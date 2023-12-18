@@ -24,6 +24,9 @@ public class CalendarCreator : MonoBehaviour
 
     List<CalendarDay> thisMonthsDays = new List<CalendarDay>();
 
+    [SerializeField] GameObject tryAddTimeObj;
+    [SerializeField] GameObject confirmAddTimeParentObj;
+
     private void Awake()
     {
         if (instance == null)
@@ -113,6 +116,8 @@ public class CalendarCreator : MonoBehaviour
         selectedCalendarDay = newSelectedDay;
         UpdateCurrentCalendarDay();
         AddTimeController.instance.ResetTimeToAdd();
+        tryAddTimeObj.SetActive(true);
+        confirmAddTimeParentObj.SetActive(false);
     }
 
     public void AdvanceMonth()
